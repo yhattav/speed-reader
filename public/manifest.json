@@ -1,0 +1,22 @@
+{
+    "manifest_version": 2,
+    "name": "Speed Reader",
+    "version": "1.0",
+    "description": "Read web content faster with a focused reading experience.",
+    "permissions": ["storage", "activeTab"],
+    "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"],
+        "css": ["content.css"]
+      }
+    ],
+    "browser_action": {
+      "default_popup": "index.html"
+    },
+    "options_page": "options.html"
+  }
