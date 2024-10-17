@@ -6,6 +6,7 @@
 
   export let words = [];
   export let wordsPerMinute = 400;
+  export let isExpanded = false;
 
   let currentWord = { before: '', center: '', after: '' };
   let progress = 0;
@@ -13,6 +14,14 @@
   let wordIndex = 0;
 
   let interval;
+
+  onMount(() => {
+    console.log('SpeedReader component mounted');
+  });
+
+  $: {
+    console.log('isExpanded changed:', isExpanded);
+  }
 
   function splitWord(word) {
     const length = word.length;
@@ -25,6 +34,7 @@
   }
 
   function startReading() {
+    console.log('startReading called');
     isReading = true;
     wordIndex = 0;
     interval = setInterval(() => {
@@ -40,29 +50,42 @@
   }
 
   function stopReading() {
+    console.log('stopReading called');
     isReading = false;
     clearInterval(interval);
   }
 
   function handleClick() {
-    if (isReading) {
-      stopReading();
-    } else {
-      startReading();
+    console.log('handleClick called');
+    if (isExpanded) {
+      if (isReading) {
+        stopReading();
+      } else {
+        startReading();
+      }
     }
   }
 
   onDestroy(() => {
     if (interval) clearInterval(interval);
+    console.log('SpeedReader component destroyed');
   });
 </script>
 
-<Popup on:click={handleClick}>
-  <Text 
-    before={currentWord.before}
-    center={currentWord.center}
-    after={currentWord.after}
-    {isReading}
-  />
-  <ProgressBar {progress} />
+<Popup {isExpanded} on:click={handleClick}>
+  {#if isExpanded}
+    <Text 
+      before={currentWord.before}
+      center={currentWord.center}
+      after={currentWord.after}
+      {isReading}
+    />
+    <ProgressBar {progress} />
+  {:else}
+    <div class="small-icon">SR</div>
+  {/if}
 </Popup>
+
+<style>
+  /* You can remove all styles from here, as they are now in content.css */
+</style>
