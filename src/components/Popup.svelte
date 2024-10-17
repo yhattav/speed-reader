@@ -1,7 +1,9 @@
 <script>
     import { createEventDispatcher, onMount } from 'svelte';
+    import BackslashLogo from './BackslashLogo.svelte';
     
     export let isExpanded = false;
+    export let offsetColor = '255, 69, 0'; // Default to orange-red
     
     const dispatch = createEventDispatcher();
 
@@ -20,7 +22,17 @@
 </script>
 
 <div class="speed-reader-popup" class:expanded={isExpanded} on:click={handleClick}>
-  <slot></slot>
+  <div class="logo-container left">
+    <BackslashLogo {isExpanded} {offsetColor} position="left" />
+  </div>
+  {#if isExpanded}
+    <div class="content">
+      <slot></slot>
+    </div>
+    <div class="logo-container right">
+      <BackslashLogo {isExpanded} {offsetColor} position="right" />
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -34,11 +46,14 @@
     border: 1px solid rgba(250, 250, 250, 0.5);
     cursor: pointer;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .speed-reader-popup:not(.expanded) {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     padding: 0;
   }
@@ -51,12 +66,32 @@
     font-size: 24px;
   }
 
-  :global(.paragraph-highlight) {
-    transition: box-shadow 0.3s ease;
+  .logo-container {
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
   }
 
-  :global(.expanded .paragraph-highlight) {
-    box-shadow: 0 0 0 3px rgba(var(--offsetColor), 0.2);
-    border-radius: 2px;
+  .speed-reader-popup.expanded .logo-container {
+    width: 40px;
+    height: 40px;
+  }
+
+  .logo-container.left {
+    position: absolute;
+    left: 10px;
+  }
+
+  .logo-container.right {
+    position: absolute;
+    right: 10px;
+  }
+
+  .content {
+    flex-grow: 1;
+    margin: 0 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>

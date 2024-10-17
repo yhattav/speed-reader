@@ -7,6 +7,7 @@
   export let words = [];
   export let wordsPerMinute = 400;
   export let isExpanded = false;
+  export let offsetColor = '255, 69, 0'; // Default to orange-red
 
   let currentWord = { before: '', center: '', after: '' };
   let progress = 0;
@@ -72,46 +73,28 @@
   });
 </script>
 
-<Popup {isExpanded} on:click={handleClick}>
+<Popup {isExpanded} {offsetColor} on:click={handleClick}>
   {#if isExpanded}
-    <Text 
-      before={currentWord.before}
-      center={currentWord.center}
-      after={currentWord.after}
-      {isReading}
-    />
-    <ProgressBar {progress} />
-  {:else}
-    <div class="small-icon">SR</div>
+    <div class="content-wrapper">
+      <Text 
+        before={currentWord.before}
+        center={currentWord.center}
+        after={currentWord.after}
+        {isReading}
+      />
+      <ProgressBar {progress} />
+    </div>
   {/if}
 </Popup>
 
 <style>
-  .speed-reader-popup {
-    z-index: 9999;
-    font-family: Arial, sans-serif;
-    background: rgba(250, 250, 250, 0.86);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(6.9px);
-    -webkit-backdrop-filter: blur(6.9px);
-    border: 1px solid rgba(250, 250, 250, 0.5);
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .speed-reader-popup:not(.expanded) {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    padding: 0;
-  }
-
-  .speed-reader-popup.expanded {
-    width: 300px;
-    height: 100px;
-    border-radius: 16px;
-    padding: 10px;
-    font-size: 24px;
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
   }
 
   :global(.paragraph-highlight) {
@@ -119,7 +102,7 @@
   }
 
   :global(.paragraph-highlight.expanded) {
-    box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.2);
+    box-shadow: 0 0 0 3px rgba(var(--offsetColor), 0.2);
     border-radius: 2px;
   }
 </style>

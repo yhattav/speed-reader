@@ -4,7 +4,7 @@ import SpeedReader from './SpeedReader.svelte';
 const HOVER_DELAY = 300;
 const HIDE_DELAY = 1000;
 const MIN_WORDS = 10;
-const SMALL_SIZE = 20;
+const SMALL_SIZE = 30;
 const FULL_WIDTH = 300;
 const FULL_HEIGHT = 100;
 
@@ -72,7 +72,8 @@ function showSpeedReader(e, target, words) {
     props: {
       words: words,
       wordsPerMinute: 400,
-      isExpanded: false
+      isExpanded: false,
+      offsetColor: '255, 69, 0' // You can change this value or make it configurable
     }
   });
 
