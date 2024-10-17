@@ -52,12 +52,11 @@
   }
 
   :global(.paragraph-highlight) {
-    transition: border 0.3s ease;
+    transition: box-shadow 0.3s ease;
   }
 
-  :global(.paragraph-highlight.expanded) {
-    border: 1px solid var(--offsetColor, #ff4500);
-    padding: 5px;
-    border-radius: 4px;
+  :global(.expanded .paragraph-highlight) {
+    box-shadow: 0 0 0 3px rgba(var(--offsetColor), 0.2);
+    border-radius: 2px;
   }
 </style>
