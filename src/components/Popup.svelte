@@ -29,10 +29,10 @@
     <div class="content">
       <slot></slot>
     </div>
+    {/if}
     <div class="logo-container right">
       <BackslashLogo {isExpanded} {offsetColor} position="right" />
     </div>
-  {/if}
 </div>
 
 <style>
@@ -40,7 +40,7 @@
     z-index: 9999;
     font-family: Arial, sans-serif;
     background: rgba(250, 250, 250, 0.86);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(6.9px);
     -webkit-backdrop-filter: blur(6.9px);
     border: 1px solid rgba(250, 250, 250, 0.5);
@@ -54,8 +54,9 @@
   .speed-reader-popup:not(.expanded) {
     width: 30px;
     height: 30px;
-    border-radius: 50%;
+    border-radius: 5%;
     padding: 0;
+    overflow: visible;
   }
 
   .speed-reader-popup.expanded {
@@ -67,24 +68,28 @@
   }
 
   .logo-container {
-    width: 25px;
-    height: 25px;
+    width: 10px;
+    height: 100%;
     flex-shrink: 0;
+    position: absolute;
+    overflow: visible;
   }
 
-  .speed-reader-popup.expanded .logo-container {
+  .speed-reader-popup:not(.expanded) .logo-container {
+    top: 2.5px;
+  }
+
+  .speed-reader-popup .logo-container {
     width: 40px;
-    height: 40px;
+    height: 100%;
   }
 
-  .logo-container.left {
-    position: absolute;
-    left: 10px;
+  .speed-reader-popup.expanded .logo-container.left {
+    left: 0px;
   }
 
-  .logo-container.right {
-    position: absolute;
-    right: 10px;
+  .speed-reader-popup .logo-container.right {
+    right: 0px;
   }
 
   .content {

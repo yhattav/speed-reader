@@ -1,11 +1,13 @@
 import SpeedReader from './SpeedReader.svelte';
 
 export default {
-  title: 'SpeedReader',
+  title: 'Components/SpeedReader',
   component: SpeedReader,
   argTypes: {
     words: { control: 'array' },
-    wordsPerMinute: { control: { type: 'number', min: 100, max: 1000, step: 50 } },
+    wordsPerMinute: { control: 'number' },
+    isExpanded: { control: 'boolean' },
+    offsetColor: { control: 'text' },
   },
 };
 
@@ -16,12 +18,14 @@ const Template = (args) => ({
 
 export const Default = Template.bind({});
 Default.args = {
-  words: ['This', 'is', 'a', 'test', 'of', 'the', 'Speed', 'Reader', 'component'],
+  words: ['This', 'is', 'a', 'test', 'sentence', 'for', 'the', 'SpeedReader', 'component'],
   wordsPerMinute: 300,
+  isExpanded: false,
+  offsetColor: '255, 69, 0',
 };
 
-export const LongText = Template.bind({});
-LongText.args = {
-  words: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'.split(' '),
-  wordsPerMinute: 400,
+export const Expanded = Template.bind({});
+Expanded.args = {
+  ...Default.args,
+  isExpanded: true,
 };

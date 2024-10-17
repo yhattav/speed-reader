@@ -7,43 +7,31 @@ const MIN_WORDS = 10;
 const SMALL_SIZE = 30;
 const FULL_WIDTH = 300;
 const FULL_HEIGHT = 100;
+const SHOW_DELAY = 1000; // New constant for the 1-second delay before showing
+const CURSOR_OFFSET_X = 10; // Offset to the right of the cursor
+const CURSOR_OFFSET_Y = -10; // Offset above the cursor
 
-let speedReader;
-let currentElement = null;
-let hoverTimeout = null;
-let hideTimeout = null;
-let speedReaderDiv = null;
-let isParagraphConsideredHovered = false;
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
 
-function handleMouseMove(e) {
-  console.log('Mouse moved');
-  
-  if (isOverSpeedReaderOrParagraph(e)) {
-    isParagraphConsideredHovered = true;
-    clearTimeout(hideTimeout);
-    return;
-  }
-
-  clearTimeout(hoverTimeout);
-  clearTimeout(hideTimeout);
-
-  hoverTimeout = setTimeout(() => {
-    console.log('Hover timeout triggered');
-    const target = e.target;
-    const text = target.innerText;
-    const words = text.split(/\s+/);
-    
-    if (words.length >= MIN_WORDS && target !== currentElement) {
-      console.log('Showing SpeedReader');
-      currentElement = target;
-      isParagraphConsideredHovered = true;
-      showSpeedReader(e, target, words);
-    } else if (target !== currentElement) {
-      console.log('Hiding SpeedReader');
-      isParagraphConsideredHovered = false;
-      hideSpeedReader();
+function throttle(func, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func(...args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
     }
-  }, HOVER_DELAY);
+  }
 }
 
 function isOverSpeedReaderOrParagraph(e) {
@@ -51,16 +39,74 @@ function isOverSpeedReaderOrParagraph(e) {
          (currentElement && currentElement.contains(e.target));
 }
 
-function showSpeedReader(e, target, words) {
-  console.log('showSpeedReader called');
+let speedReader;
+let currentElement = null;
+let speedReaderDiv = null;
+let isParagraphConsideredHovered = false;
+let isOverPopup = false;
+let lastMousePosition = { x: 0, y: 0 };
+let removalTimeout = null;
+
+function handleMouseMove(e) {
+  console.log('Mouse moved');
+  
+  if (isOverPopup) {
+    debugger;
+    isParagraphConsideredHovered = true;
+    stopRemovalCountdown('because im not over the paragraph');
+  } else {
+    console.log('Initiating popup removal');
+    initiatePopupRemoval();
+  }
+
+  lastMousePosition = { x: e.clientX, y: e.clientY };
+  const target = document.elementFromPoint(lastMousePosition.x, lastMousePosition.y);
+  const text = target.innerText;
+  const words = text.split(/\s+/);
+  
+  if (words.length >= MIN_WORDS && target !== currentElement) {
+    debouncedShowPopup(target, words);
+  }
+
+  if (speedReaderDiv) {
+    debouncedHidePopup();
+  }
+}
+
+//create a function that will be called initiate popup removal. this will initiate the countdown to removing the popup. another function stop removal countdown will also be needed.
+
+function initiatePopupRemoval() {
+  console.log('Initiating popup removal');
+  if (removalTimeout) {
+    console.log('Removal countdown already initiated');
+    return;
+  }
+  console.log('>>>>Initiating removal countdown');
+  removalTimeout = setTimeout(() => {
+    console.log('>>>>Removal countdown complete');
+    hidePopup();
+  }, SHOW_DELAY); // Use SHOW_DELAY for consistency
+  // Add your code here
+  setTimeout(() => {
+    console.log('>>>>WOULD HAPPEN');
+  }, SHOW_DELAY);
+}
+
+function stopRemovalCountdown(a) {
+  if (removalTimeout) {
+    console.log('Stopping removal countdown',a);
+    clearTimeout(removalTimeout);
+    removalTimeout = null;
+  }
+  isParagraphConsideredHovered = true;
+}
+function showPopup(target, words) {
+  console.log('showPopup called');
+  stopRemovalCountdown('because im showing popup'); // Stop any ongoing removal countdown
   if (speedReader) {
     console.log('Destroying existing SpeedReader');
     speedReader.$destroy();
   }
-
-  const targetRect = target.getBoundingClientRect();
-  const left = targetRect.left + (targetRect.width / 2) - (SMALL_SIZE / 2);
-  const top = e.clientY - (SMALL_SIZE / 2);
 
   speedReaderDiv = document.createElement('div');
   document.body.appendChild(speedReaderDiv);
@@ -73,28 +119,82 @@ function showSpeedReader(e, target, words) {
       words: words,
       wordsPerMinute: 400,
       isExpanded: false,
-      offsetColor: '255, 69, 0' // You can change this value or make it configurable
+      offsetColor: '255, 69, 0'
     }
   });
 
   console.log('SpeedReader component created:', speedReader);
 
-  speedReaderDiv.style.position = 'absolute';
-  speedReaderDiv.style.left = `${Math.max(0, left)}px`;
-  speedReaderDiv.style.top = `${top}px`;
-  speedReaderDiv.style.width = `${SMALL_SIZE}px`;
-  speedReaderDiv.style.height = `${SMALL_SIZE}px`;
-  speedReaderDiv.style.overflow = 'hidden';
-  speedReaderDiv.style.transition = 'width 0.3s, height 0.3s';
+  positionSpeedReader();
 
   speedReaderDiv.addEventListener('mouseenter', () => {
-    clearTimeout(hideTimeout);
+    isOverPopup = true;
     isParagraphConsideredHovered = true;
     expandSpeedReader();
   });
   speedReaderDiv.addEventListener('mouseleave', handleSpeedReaderLeave);
 
   target.addEventListener('mouseleave', handleParagraphLeave);
+}
+
+function hidePopup() {
+  console.log('hidePopup called');
+  if (speedReader) {
+    speedReader.$destroy();
+    speedReader = null;
+  }
+  if (speedReaderDiv) {
+    speedReaderDiv.remove();
+    speedReaderDiv = null;
+  }
+  if (currentElement) {
+    currentElement.classList.remove('paragraph-highlight', 'expanded');
+    currentElement = null;
+  }
+  isParagraphConsideredHovered = false;
+  removalTimeout = null; // Reset the removal timeout
+}
+
+const debouncedShowPopup = debounce((target, words) => {
+  console.log('Debounced show popup');
+  currentElement = target;
+  isParagraphConsideredHovered = true;
+  showPopup(target, words);
+}, SHOW_DELAY);
+
+const debouncedHidePopup = debounce(() => {
+  console.log('Debounced hide popup');
+  if (!isParagraphConsideredHovered) {
+    hidePopup();
+  }
+}, SHOW_DELAY);
+
+function handleParagraphLeave(e) {
+  console.log('Paragraph left');
+  if (!isOverSpeedReaderOrParagraph(e)) {
+    initiatePopupRemoval();
+  }
+}
+
+function handleSpeedReaderLeave(e) {
+  console.log('SpeedReader left');
+  isOverPopup = false;
+  shrinkSpeedReader();
+}
+
+function positionSpeedReader() {
+  if (speedReaderDiv) {
+    const left = lastMousePosition.x + CURSOR_OFFSET_X;
+    const top = lastMousePosition.y + CURSOR_OFFSET_Y;
+
+    speedReaderDiv.style.position = 'fixed';
+    speedReaderDiv.style.left = `${Math.max(0, left)}px`;
+    speedReaderDiv.style.top = `${Math.max(0, top)}px`;
+    speedReaderDiv.style.width = `${SMALL_SIZE}px`;
+    speedReaderDiv.style.height = `${SMALL_SIZE}px`;
+    speedReaderDiv.style.overflow = 'hidden';
+    speedReaderDiv.style.transition = 'width 0.3s, height 0.3s';
+  }
 }
 
 function expandSpeedReader() {
@@ -109,21 +209,6 @@ function expandSpeedReader() {
   }
 }
 
-function handleParagraphLeave(e) {
-  console.log('Paragraph left');
-  if (!isOverSpeedReaderOrParagraph(e)) {
-    setHideTimeout();
-  }
-}
-
-function handleSpeedReaderLeave(e) {
-  console.log('SpeedReader left');
-  if (!isOverSpeedReaderOrParagraph(e)) {
-    setHideTimeout();
-  }
-  shrinkSpeedReader();
-}
-
 function shrinkSpeedReader() {
   console.log('Shrinking SpeedReader');
   if (speedReader && speedReaderDiv) {
@@ -136,37 +221,12 @@ function shrinkSpeedReader() {
   }
 }
 
-function setHideTimeout() {
-  clearTimeout(hideTimeout);
-  hideTimeout = setTimeout(() => {
-    console.log('Hide timeout triggered');
-    if (!isParagraphConsideredHovered) {
-      hideSpeedReader();
-    }
-  }, HIDE_DELAY);
-}
+const throttledHandleMouseMove = throttle(handleMouseMove, 100);
 
-function hideSpeedReader() {
-  console.log('hideSpeedReader called');
-  if (speedReader) {
-    speedReader.$destroy();
-    speedReader = null;
-  }
-  if (speedReaderDiv) {
-    speedReaderDiv.remove();
-    speedReaderDiv = null;
-  }
-  if (currentElement) {
-    currentElement.classList.remove('paragraph-highlight', 'expanded');
-    currentElement = null;
-  }
-  isParagraphConsideredHovered = false;
-}
-
-document.addEventListener('mousemove', handleMouseMove);
+document.addEventListener('mousemove', throttledHandleMouseMove);
 
 // Clean up
 window.addEventListener('unload', () => {
-  document.removeEventListener('mousemove', handleMouseMove);
-  hideSpeedReader();
+  document.removeEventListener('mousemove', throttledHandleMouseMove);
+  hidePopup();
 });
