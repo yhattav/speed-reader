@@ -50,4 +50,14 @@
     padding: 10px;
     font-size: 24px;
   }
+
+  :global(.paragraph-highlight) {
+    transition: border 0.3s ease;
+  }
+
+  :global(.paragraph-highlight.expanded) {
+    border: 1px solid var(--offsetColor, #ff4500);
+    padding: 5px;
+    border-radius: 4px;
+  }
 </style>

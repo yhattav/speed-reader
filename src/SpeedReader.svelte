@@ -87,5 +87,18 @@
 </Popup>
 
 <style>
-  /* You can remove all styles from here, as they are now in content.css */
+  :global(.paragraph-highlight) {
+    transition: border 0.3s ease;
+  }
+
+  :global(.expanded .paragraph-highlight) {
+    border: 1px solid var(--offsetColor, #ff4500);
+    padding: 5px;
+    border-radius: 4px;
+  }
+
+  .small-icon {
+    font-size: 12px;
+    font-weight: bold;
+  }
 </style>

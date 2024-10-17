@@ -72,7 +72,7 @@ export default [
 					dev: !production
 				}
 			}),
-			css({ output: 'content.css' }),
+			css({ output: 'content.css' }), // This line processes and outputs content.css
 			resolve({
 				browser: true,
 				dedupe: ['svelte']

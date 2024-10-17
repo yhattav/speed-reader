@@ -1,16 +1,5 @@
 import SpeedReader from './SpeedReader.svelte';
 
-// Add this at the beginning of the file
-function injectCSS(file) {
-  const link = document.createElement('link');
-  link.href = chrome.runtime.getURL(file);
-  link.type = 'text/css';
-  link.rel = 'stylesheet';
-  document.head.appendChild(link);
-}
-
-// Call this function at the beginning of your content script
-injectCSS('content.css');
 
 const HOVER_DELAY = 300;
 const HIDE_DELAY = 1000;
@@ -76,6 +65,8 @@ function showSpeedReader(e, target, words) {
   speedReaderDiv = document.createElement('div');
   document.body.appendChild(speedReaderDiv);
 
+  target.classList.add('paragraph-highlight');
+
   speedReader = new SpeedReader({
     target: speedReaderDiv,
     props: {
@@ -111,6 +102,9 @@ function expandSpeedReader() {
     speedReaderDiv.style.width = `${FULL_WIDTH}px`;
     speedReaderDiv.style.height = `${FULL_HEIGHT}px`;
     speedReader.$set({ isExpanded: true });
+    if (currentElement) {
+      currentElement.classList.add('expanded');
+    }
   }
 }
 
@@ -135,6 +129,9 @@ function shrinkSpeedReader() {
     speedReaderDiv.style.width = `${SMALL_SIZE}px`;
     speedReaderDiv.style.height = `${SMALL_SIZE}px`;
     speedReader.$set({ isExpanded: false });
+    if (currentElement) {
+      currentElement.classList.remove('expanded');
+    }
   }
 }
 
@@ -159,7 +156,7 @@ function hideSpeedReader() {
     speedReaderDiv = null;
   }
   if (currentElement) {
-    currentElement.removeEventListener('mouseleave', handleParagraphLeave);
+    currentElement.classList.remove('paragraph-highlight', 'expanded');
     currentElement = null;
   }
   isParagraphConsideredHovered = false;
