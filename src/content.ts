@@ -2,13 +2,14 @@ import SpeedReader from './SpeedReader.svelte';
 import { debounce, throttle, isOverElement, splitWords, clamp } from './utils';
 
 const HIDE_DELAY = 1000;
-const MIN_WORDS = 10;
+let MIN_WORDS = 10;
 const SMALL_SIZE = 30;
 const FULL_WIDTH = 300;
 const FULL_HEIGHT = 100;
 const SHOW_DELAY = 500;
 const CURSOR_OFFSET_X = 10;
 const CURSOR_OFFSET_Y = -10;
+let WORDS_PER_MINUTE = 400;
 
 let speedReader: SpeedReader | null = null;
 let currentElement: HTMLElement | null = null;
@@ -86,7 +87,7 @@ function showPopup(target: HTMLElement, words: string[]): void {
         target: speedReaderDiv,
         props: {
             words: words,
-            wordsPerMinute: 400,
+            wordsPerMinute: WORDS_PER_MINUTE,
             isExpanded: false,
             offsetColor: '255, 69, 0'
         }
@@ -198,4 +199,28 @@ document.addEventListener('mousemove', throttledHandleMouseMove);
 window.addEventListener('unload', () => {
     document.removeEventListener('mousemove', throttledHandleMouseMove);
     hidePopup();
+});
+
+function loadSettings() {
+    chrome.storage.sync.get(['minWords', 'wordsPerMinute'], (result) => {
+        MIN_WORDS = result.minWords || 10;
+        WORDS_PER_MINUTE = result.wordsPerMinute || 400;
+        console.log('Settings loaded:', { MIN_WORDS, WORDS_PER_MINUTE });
+    });
+}
+
+// Call loadSettings when the content script is injected
+loadSettings();
+console.log('Content script loaded');
+// Listen for changes in chrome storage
+chrome.storage.onChanged.addListener((changes, namespace) => {
+    if (namespace === 'sync') {
+        if (changes.minWords) {
+            MIN_WORDS = changes.minWords.newValue;
+        }
+        if (changes.wordsPerMinute) {
+            WORDS_PER_MINUTE = changes.wordsPerMinute.newValue;
+        }
+        console.log('Settings updated:', { MIN_WORDS, WORDS_PER_MINUTE });
+    }
 });

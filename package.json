@@ -4,9 +4,10 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c && cp src/content.css public/content.css",
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear",
+    "clean": "rm -rf public/build public/content.js public/content.js.map public/content.css",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "check": "svelte-check"

@@ -3,7 +3,9 @@
     "name": "Speed Reader",
     "version": "1.0",
     "description": "Read web content faster with a focused reading experience.",
-    "permissions": ["storage", "activeTab"],
+    "permissions": [
+        "storage"
+    ],
     "action": {
       "default_popup": "index.html"
     },

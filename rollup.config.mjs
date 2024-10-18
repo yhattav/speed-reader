@@ -30,37 +30,53 @@ function serve() {
 	};
 }
 
-export default {
-	input: 'src/main.ts',
-	output: {
-		sourcemap: true,
-		format: 'iife',
-		name: 'app',
-		file: 'public/build/bundle.js'
+const sharedPlugins = [
+	svelte({
+		preprocess: sveltePreprocess({ sourceMap: !production }),
+		compilerOptions: {
+			dev: !production
+		}
+	}),
+	css({ output: 'bundle.css' }),
+	resolve({
+		browser: true,
+		dedupe: ['svelte']
+	}),
+	commonjs(),
+	typescript({
+		sourceMap: !production,
+		inlineSources: !production
+	}),
+	!production && serve(),
+	!production && livereload('public'),
+	production && terser()
+];
+
+export default [
+	{
+		input: 'src/main.ts',
+		output: {
+			sourcemap: true,
+			format: 'iife',
+			name: 'app',
+			file: 'public/build/bundle.js'
+		},
+		plugins: sharedPlugins,
+		watch: {
+			clearScreen: false
+		}
 	},
-	plugins: [
-		svelte({
-			preprocess: sveltePreprocess({ sourceMap: !production }),
-			compilerOptions: {
-				// enable run-time checks when not in production
-				dev: !production
-			}
-		}),
-		css({ output: 'bundle.css' }),
-		resolve({
-			browser: true,
-			dedupe: ['svelte']
-		}),
-		commonjs(),
-		typescript({
-			sourceMap: !production,
-			inlineSources: !production
-		}),
-		!production && serve(),
-		!production && livereload('public'),
-		production && terser()
-	],
-	watch: {
-		clearScreen: false
+	{
+		input: 'src/content.ts',
+		output: {
+			sourcemap: true,
+			format: 'iife',
+			name: 'content',
+			file: 'public/content.js'
+		},
+		plugins: sharedPlugins,
+		watch: {
+			clearScreen: false
+		}
 	}
-};
+];

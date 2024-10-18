@@ -1,10 +1,12 @@
 <script lang="ts">
 	// Popup logic here
-  </script>
+	import Options from './Options.svelte';
+</script>
   
   <main>
 	<h1>Speed Reader</h1>
 	<!-- Add any popup content here -->
+	<Options />
   </main>
   
   <style>
