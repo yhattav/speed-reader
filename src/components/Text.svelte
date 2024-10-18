@@ -8,6 +8,7 @@
     export let after = '';
     export let isReading = false;
     export let textSize = 24;
+    $: console.log('textSize text', textSize);
 </script>
   
 <div class="speed-reader-content" style="--text-size: {textSize}px;">

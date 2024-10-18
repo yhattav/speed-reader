@@ -9,6 +9,8 @@
   export let isExpanded = false;
   export let offsetColor = '255, 69, 0'; // Default to orange-red
   export let textSize = 24;
+  $: console.log('textSize text', textSize);
+
 
   let currentWord = { before: '', center: '', after: '' };
   let progress = 0;

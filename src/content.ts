@@ -89,6 +89,7 @@ function showPopup(target: HTMLElement, words: string[]): void {
         props: {
             words: words,
             wordsPerMinute: WORDS_PER_MINUTE,
+            textSize: TEXT_SIZE,
             isExpanded: false,
             offsetColor: '255, 69, 0'
         }
