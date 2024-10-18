@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     export let isExpanded = false;
     export let offsetColor = '255, 69, 0'; // Default to orange-red
     export let position = 'left'; // 'left' or 'right'

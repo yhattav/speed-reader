@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import Popup from './components/Popup.svelte';
   import Text from './components/Text.svelte';

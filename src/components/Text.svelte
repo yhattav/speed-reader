@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import BeforeText from './BeforeText.svelte';
     import CenterText from './CenterText.svelte';
     import AfterText from './AfterText.svelte';
