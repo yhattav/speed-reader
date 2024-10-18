@@ -8,6 +8,7 @@ export default {
     wordsPerMinute: { control: 'number' },
     isExpanded: { control: 'boolean' },
     offsetColor: { control: 'text' },
+    textSize: { control: 'number' },
   },
 };
 
@@ -22,10 +23,25 @@ Default.args = {
   wordsPerMinute: 300,
   isExpanded: false,
   offsetColor: '255, 69, 0',
+  textSize: 24,
 };
 
 export const Expanded = Template.bind({});
 Expanded.args = {
   ...Default.args,
   isExpanded: true,
+};
+
+export const LargeText = Template.bind({});
+LargeText.args = {
+  ...Default.args,
+  isExpanded: true,
+  textSize: 36,
+};
+
+export const SmallText = Template.bind({});
+SmallText.args = {
+  ...Default.args,
+  isExpanded: true,
+  textSize: 16,
 };

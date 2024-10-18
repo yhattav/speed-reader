@@ -8,6 +8,7 @@
   export let wordsPerMinute = 400;
   export let isExpanded = false;
   export let offsetColor = '255, 69, 0'; // Default to orange-red
+  export let textSize = 24;
 
   let currentWord = { before: '', center: '', after: '' };
   let progress = 0;
@@ -83,16 +84,15 @@
 </script>
 
 <Popup {isExpanded} {offsetColor} on:click={handleClick}>
-  {#if isExpanded && showContent}
-    <div class="content-wrapper" class:fade-in={showContent}>
-      <Text 
-        before={currentWord.before}
-        center={currentWord.center}
-        after={currentWord.after}
-        {isReading}
-      />
-      <ProgressBar {progress} />
-    </div>
+  {#if showContent}
+    <Text
+      before={currentWord.before}
+      center={currentWord.center}
+      after={currentWord.after}
+      {isReading}
+      {textSize}
+    />
+    <ProgressBar {progress} />
   {/if}
 </Popup>
 

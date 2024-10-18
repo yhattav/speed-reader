@@ -10,6 +10,7 @@ const SHOW_DELAY = 500;
 const CURSOR_OFFSET_X = 10;
 const CURSOR_OFFSET_Y = -30;
 let WORDS_PER_MINUTE = 400;
+let TEXT_SIZE = 24;
 
 let speedReader: SpeedReader | null = null;
 let currentElement: HTMLElement | null = null;
@@ -198,10 +199,11 @@ window.addEventListener('unload', () => {
 });
 
 function loadSettings() {
-    chrome.storage.sync.get(['minWords', 'wordsPerMinute'], (result) => {
+    chrome.storage.sync.get(['minWords', 'wordsPerMinute', 'textSize'], (result) => {
         MIN_WORDS = result.minWords || 10;
         WORDS_PER_MINUTE = result.wordsPerMinute || 400;
-        console.log('Settings loaded:', { MIN_WORDS, WORDS_PER_MINUTE });
+        TEXT_SIZE = result.textSize || 24;
+        console.log('Settings loaded:', { MIN_WORDS, WORDS_PER_MINUTE, TEXT_SIZE });
     });
 }
 
@@ -217,6 +219,9 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
         if (changes.wordsPerMinute) {
             WORDS_PER_MINUTE = changes.wordsPerMinute.newValue;
         }
-        console.log('Settings updated:', { MIN_WORDS, WORDS_PER_MINUTE });
+        if (changes.textSize) {
+            TEXT_SIZE = changes.textSize.newValue;
+        }
+        console.log('Settings updated:', { MIN_WORDS, WORDS_PER_MINUTE, TEXT_SIZE });
     }
 });

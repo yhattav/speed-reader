@@ -27,7 +27,7 @@
     class="speed-reader-popup" 
     class:expanded={isExpanded} 
     on:click={handleClick}
-    style="--background-color: {backgroundColor}"
+    style="--background-color: {backgroundColor};"
 >
   <div class="logo-container left decoration-level">
     <BackslashLogo {isExpanded} {offsetColor} position="left" />
@@ -36,10 +36,10 @@
     <div class="content content-level">
       <slot></slot>
     </div>
-    {/if}
-    <div class="logo-container right decoration-level">
-      <BackslashLogo {isExpanded} {offsetColor} position="right" />
-    </div>
+  {/if}
+  <div class="logo-container right decoration-level">
+    <BackslashLogo {isExpanded} {offsetColor} position="right" />
+  </div>
 </div>
 
 <style>

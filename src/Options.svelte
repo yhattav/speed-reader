@@ -5,6 +5,7 @@
 
     let wordsPerMinute = 400;
     let minWords = 10;
+    let textSize = 24; // Default text size
     let chromeApiAvailable = false;
 
     onMount(() => {
@@ -16,10 +17,11 @@
 
         if (chromeApiAvailable) {
             // Load saved settings from storage
-            chrome.storage.sync.get(['wordsPerMinute', 'minWords'], (result) => {
+            chrome.storage.sync.get(['wordsPerMinute', 'minWords', 'textSize'], (result) => {
                 console.log('Chrome storage get result:', result);
                 wordsPerMinute = result.wordsPerMinute || 400;
                 minWords = result.minWords || 10;
+                textSize = result.textSize || 24;
             });
         } else {
             console.error('Chrome storage API not available');
@@ -27,9 +29,9 @@
     });
 
     function saveSettings() {
-        console.log('Saving settings:', { wordsPerMinute, minWords });
+        console.log('Saving settings:', { wordsPerMinute, minWords, textSize });
         if (chromeApiAvailable) {
-            chrome.storage.sync.set({ wordsPerMinute, minWords }, () => {
+            chrome.storage.sync.set({ wordsPerMinute, minWords, textSize }, () => {
                 console.log('Settings saved successfully');
             });
         } else {
@@ -44,6 +46,11 @@
 
     function handleMinWordsChange(newValue: number) {
         minWords = newValue;
+        saveSettings();
+    }
+
+    function handleTextSizeChange(newValue: number) {
+        textSize = newValue;
         saveSettings();
     }
 </script>
@@ -67,6 +74,15 @@
         step={1}
         value={minWords}
         onChange={handleMinWordsChange}
+    />
+
+    <Slider
+        label="Text size"
+        min={12}
+        max={36}
+        step={1}
+        value={textSize}
+        onChange={handleTextSizeChange}
     />
 </main>
 

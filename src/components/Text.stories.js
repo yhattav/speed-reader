@@ -8,6 +8,7 @@ export default {
     center: { control: 'text' },
     after: { control: 'text' },
     isReading: { control: 'boolean' },
+    textSize: { control: 'number' },
   },
 };
 
@@ -22,6 +23,7 @@ Default.args = {
   center: 'the',
   after: 'center word',
   isReading: true,
+  textSize: 24,
 };
 
 export const NotReading = Template.bind({});
@@ -30,5 +32,17 @@ NotReading.args = {
   center: 'Click to start',
   after: '',
   isReading: false,
+  textSize: 24,
 };
 
+export const LargeText = Template.bind({});
+LargeText.args = {
+  ...Default.args,
+  textSize: 36,
+};
+
+export const SmallText = Template.bind({});
+SmallText.args = {
+  ...Default.args,
+  textSize: 16,
+};
