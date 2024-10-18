@@ -37,7 +37,7 @@ const sharedPlugins = [
 			dev: !production
 		}
 	}),
-	css({ output: 'bundle.css' }),
+	css({ output: 'content.css' }),
 	resolve({
 		browser: true,
 		dedupe: ['svelte']
