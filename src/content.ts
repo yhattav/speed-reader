@@ -160,9 +160,7 @@ function positionSpeedReader(): void {
         speedReaderDiv.style.position = 'fixed';
         speedReaderDiv.style.left = `${Math.max(0, left)}px`;
         speedReaderDiv.style.top = `${Math.max(0, top)}px`;
-        speedReaderDiv.style.width = `${SMALL_SIZE}px`;
-        speedReaderDiv.style.height = `${SMALL_SIZE}px`;
-        speedReaderDiv.style.overflow = 'hidden';
+        speedReaderDiv.style.overflow = 'visible';
         speedReaderDiv.style.transition = 'width 0.3s, height 0.3s';
     }
 }
@@ -170,8 +168,6 @@ function positionSpeedReader(): void {
 function expandSpeedReader(): void {
     console.log('Expanding SpeedReader');
     if (speedReader && speedReaderDiv) {
-        speedReaderDiv.style.width = `${FULL_WIDTH}px`;
-        speedReaderDiv.style.height = `${FULL_HEIGHT}px`;
         speedReader.$set({ isExpanded: true });
         if (currentElement) {
             currentElement.classList.add('expanded');

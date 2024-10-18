@@ -22,15 +22,15 @@
 </script>
 
 <div class="speed-reader-popup" class:expanded={isExpanded} on:click={handleClick}>
-  <div class="logo-container left">
+  <div class="logo-container left decoration-level">
     <BackslashLogo {isExpanded} {offsetColor} position="left" />
   </div>
   {#if isExpanded}
-    <div class="content">
+    <div class="content content-level">
       <slot></slot>
     </div>
     {/if}
-    <div class="logo-container right">
+    <div class="logo-container right decoration-level">
       <BackslashLogo {isExpanded} {offsetColor} position="right" />
     </div>
 </div>
@@ -49,6 +49,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+
+
+  .decoration-level {
+    z-index: 0;
+  }
+  .content-level {
+    z-index: 1;
   }
 
   .speed-reader-popup:not(.expanded) {
