@@ -1,1 +1,0 @@
-{"version":3,"file":"background.js","sources":["../src/background.js"],"sourcesContent":["chrome.runtime.onInstalled.addListener(() => {\n  console.log('Speed Reader extension installed');\n});"],"names":["chrome","runtime","onInstalled","addListener","console","log"],"mappings":"yBAAAA,OAAOC,QAAQC,YAAYC,aAAY,KACrCC,QAAQC,IAAI,mCAAmC"}

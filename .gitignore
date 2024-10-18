@@ -1,5 +1,10 @@
 /node_modules/
 /public/build/
+/public/content.js
+/public/content.js.map
+/public/content.css
+/public/background.js
+/public/background.js.map
 
 .DS_Store
 
