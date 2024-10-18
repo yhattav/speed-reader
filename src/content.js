@@ -1,43 +1,15 @@
 import SpeedReader from './SpeedReader.svelte';
+import { debounce, throttle, isOverElement, splitWords, clamp } from './utils.js';
 
 
-const HOVER_DELAY = 300;
 const HIDE_DELAY = 1000;
 const MIN_WORDS = 10;
 const SMALL_SIZE = 30;
 const FULL_WIDTH = 300;
 const FULL_HEIGHT = 100;
-const SHOW_DELAY = 500; // New constant for the 1-second delay before showing
-const CURSOR_OFFSET_X = 10; // Offset to the right of the cursor
-const CURSOR_OFFSET_Y = -10; // Offset above the cursor
-
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
-
-function throttle(func, limit) {
-  let inThrottle;
-  return function(...args) {
-    if (!inThrottle) {
-      func(...args);
-      inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
-    }
-  }
-}
-
-function isOverSpeedReaderOrParagraph(e) {
-  return (speedReaderDiv && speedReaderDiv.contains(e.target)) || 
-         (currentElement && currentElement.contains(e.target));
-}
+const SHOW_DELAY = 500;
+const CURSOR_OFFSET_X = 10;
+const CURSOR_OFFSET_Y = -10;
 
 let speedReader;
 let currentElement = null;
@@ -46,6 +18,10 @@ let isParagraphConsideredHovered = false;
 let isOverPopup = false;
 let lastMousePosition = { x: 0, y: 0 };
 let removalTimeout = null;
+
+function isOverSpeedReaderOrParagraph(e) {
+  return isOverElement(speedReaderDiv, e) || isOverElement(currentElement, e);
+}
 
 function handleMouseMove(e) {
   console.log('Mouse moved');
