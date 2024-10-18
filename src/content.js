@@ -7,7 +7,7 @@ const MIN_WORDS = 10;
 const SMALL_SIZE = 30;
 const FULL_WIDTH = 300;
 const FULL_HEIGHT = 100;
-const SHOW_DELAY = 1000; // New constant for the 1-second delay before showing
+const SHOW_DELAY = 500; // New constant for the 1-second delay before showing
 const CURSOR_OFFSET_X = 10; // Offset to the right of the cursor
 const CURSOR_OFFSET_Y = -10; // Offset above the cursor
 
@@ -85,11 +85,7 @@ function initiatePopupRemoval() {
   removalTimeout = setTimeout(() => {
     console.log('>>>>Removal countdown complete');
     hidePopup();
-  }, SHOW_DELAY); // Use SHOW_DELAY for consistency
-  // Add your code here
-  setTimeout(() => {
-    console.log('>>>>WOULD HAPPEN');
-  }, SHOW_DELAY);
+  }, HIDE_DELAY); // Use SHOW_DELAY for consistency
 }
 
 function stopRemovalCountdown(a) {
