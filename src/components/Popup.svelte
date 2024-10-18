@@ -15,13 +15,20 @@
       console.log('Popup isExpanded changed:', isExpanded);
     }
 
+    $: backgroundColor = isExpanded ? `rgba(250, 250, 250, 0.86)` : `rgba(0, 0, 0, 0.5)`;
+
     function handleClick() {
       console.log('Popup clicked');
       dispatch('click');
     }
 </script>
 
-<div class="speed-reader-popup" class:expanded={isExpanded} on:click={handleClick}>
+<div 
+    class="speed-reader-popup" 
+    class:expanded={isExpanded} 
+    on:click={handleClick}
+    style="--background-color: {backgroundColor}"
+>
   <div class="logo-container left decoration-level">
     <BackslashLogo {isExpanded} {offsetColor} position="left" />
   </div>
@@ -39,7 +46,7 @@
   .speed-reader-popup {
     z-index: 9999;
     font-family: Arial, sans-serif;
-    background: rgba(250, 250, 250, 0.86);
+    background: var(--background-color);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(6.9px);
     -webkit-backdrop-filter: blur(6.9px);
@@ -84,21 +91,21 @@
     overflow: visible;
   }
 
-  .speed-reader-popup:not(.expanded) .logo-container {
+  /* .speed-reader-popup:not(.expanded) .logo-container {
     top: 2.5px;
-  }
+  } */
 
   .speed-reader-popup .logo-container {
     width: 40px;
     height: 100%;
   }
 
-  .speed-reader-popup.expanded .logo-container.left {
-    left: 0px;
+  .speed-reader-popup .logo-container.left {
+    left: -10px;
   }
 
   .speed-reader-popup .logo-container.right {
-    right: 0px;
+    right: -10px;
   }
 
   .content {

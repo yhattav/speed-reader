@@ -16,12 +16,21 @@
 
   let interval;
 
+  let showContent = false;
+  let expandTransitionDuration = 300; // in milliseconds, adjust as needed
+
   onMount(() => {
     console.log('SpeedReader component mounted');
   });
 
   $: {
-    console.log('isExpanded changed:', isExpanded);
+    if (isExpanded) {
+      setTimeout(() => {
+        showContent = true;
+      }, expandTransitionDuration);
+    } else {
+      showContent = false;
+    }
   }
 
   function splitWord(word) {
@@ -74,8 +83,8 @@
 </script>
 
 <Popup {isExpanded} {offsetColor} on:click={handleClick}>
-  {#if isExpanded}
-    <div class="content-wrapper">
+  {#if isExpanded && showContent}
+    <div class="content-wrapper" class:fade-in={showContent}>
       <Text 
         before={currentWord.before}
         center={currentWord.center}
@@ -93,7 +102,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
+  .content-wrapper.fade-in {
+    opacity: 1;
   }
 
   :global(.paragraph-highlight) {

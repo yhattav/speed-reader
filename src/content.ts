@@ -8,7 +8,7 @@ const FULL_WIDTH = 300;
 const FULL_HEIGHT = 100;
 const SHOW_DELAY = 500;
 const CURSOR_OFFSET_X = 10;
-const CURSOR_OFFSET_Y = -10;
+const CURSOR_OFFSET_Y = -30;
 let WORDS_PER_MINUTE = 400;
 
 let speedReader: SpeedReader | null = null;
