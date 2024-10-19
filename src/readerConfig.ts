@@ -1,0 +1,16 @@
+export const APP_CONSTANTS = {
+    HIDE_DELAY: 1000,
+    SHOW_DELAY: 500,
+    CURSOR_OFFSET_X: 10,
+    CURSOR_OFFSET_Y: -30,
+    SMALL_SIZE: 30,
+    FULL_WIDTH: 300,
+    FULL_HEIGHT: 100,
+};
+
+export const DEFAULT_SETTINGS = {
+    WORDS_PER_MINUTE: 400,
+    MIN_WORDS: 10,
+    TEXT_SIZE: 24,
+};
+
