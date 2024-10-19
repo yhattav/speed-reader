@@ -1,4 +1,3 @@
-
 <script lang="ts">
   /* Copyright 2024 Yonatan Hattav
   
@@ -18,6 +17,8 @@
     
     export let isExpanded = false;
     export let offsetColor = '255, 69, 0'; // Default to orange-red
+    export let onPopupIn: () => void;
+    export let onPopupOut: () => void;
     
     const dispatch = createEventDispatcher();
 
@@ -35,12 +36,24 @@
       console.log('Popup clicked');
       dispatch('click');
     }
+
+    function handleMouseEnter() {
+      console.log('Popup mouse enter');
+      onPopupIn();
+    }
+
+    function handleMouseLeave() {
+      console.log('Popup mouse leave');
+      onPopupOut();
+    }
 </script>
 
 <div 
     class="speed-reader-popup" 
     class:expanded={isExpanded} 
     on:click={handleClick}
+    on:mouseenter={handleMouseEnter}
+    on:mouseleave={handleMouseLeave}
     style="--background-color: {backgroundColor};"
 >
   <div class="logo-container left decoration-level">

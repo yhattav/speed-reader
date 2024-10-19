@@ -105,20 +105,15 @@ function showPopup(target: HTMLElement, words: string[]): void {
             wordsPerMinute: WORDS_PER_MINUTE,
             textSize: TEXT_SIZE,
             isExpanded: false,
-            offsetColor: '255, 69, 0'
+            offsetColor: '255, 69, 0',
+            onPopupIn: popupIn,
+            onPopupOut: popupOut
         }
     });
 
     console.log('SpeedReader component created:', speedReader);
 
     positionSpeedReader();
-
-    speedReaderDiv.addEventListener('mouseenter', () => {
-        isOverPopup = true;
-        isParagraphConsideredHovered = true;
-        expandSpeedReader();
-    });
-    speedReaderDiv.addEventListener('mouseleave', handleSpeedReaderLeave);
 
     target.addEventListener('mouseleave', handleParagraphLeave);
 }
@@ -162,11 +157,7 @@ function handleParagraphLeave(e: MouseEvent): void {
     }
 }
 
-function handleSpeedReaderLeave(e: MouseEvent): void {
-    console.log('SpeedReader left');
-    isOverPopup = false;
-    shrinkSpeedReader();
-}
+
 
 function positionSpeedReader(): void {
     if (speedReaderDiv) {
@@ -240,3 +231,16 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
         console.log('Settings updated:', { MIN_WORDS, WORDS_PER_MINUTE, TEXT_SIZE });
     }
 });
+
+function popupIn(): void {
+    console.log('Popup in');
+    isOverPopup = true;
+    isParagraphConsideredHovered = true;
+    expandSpeedReader();
+}
+
+function popupOut(): void {
+    console.log('Popup out');
+    isOverPopup = false;
+    shrinkSpeedReader();
+}

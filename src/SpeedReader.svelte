@@ -1,4 +1,3 @@
-
 <script lang="ts">
   /* Copyright 2024 Yonatan Hattav
   
@@ -23,6 +22,8 @@
   export let isExpanded = false;
   export let offsetColor = '255, 69, 0'; // Default to orange-red
   export let textSize = 24;
+  export let onPopupIn: () => void;
+  export let onPopupOut: () => void;
   $: console.log('textSize text', textSize);
 
 
@@ -99,7 +100,13 @@
   });
 </script>
 
-<Popup {isExpanded} {offsetColor} on:click={handleClick}>
+<Popup 
+  {isExpanded} 
+  {offsetColor} 
+  on:click={handleClick}
+  {onPopupIn}
+  {onPopupOut}
+>
   {#if showContent}
     <Text
       before={currentWord.before}
