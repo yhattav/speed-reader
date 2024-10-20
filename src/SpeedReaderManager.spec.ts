@@ -26,7 +26,7 @@ describe('SpeedReaderManager', () => {
     // });
   });
 
-  it('constructor initializes with default settings', () => {
+  test('constructor initializes with default settings', () => {
     expect((manager as any).settings).toEqual({
       WORDS_PER_MINUTE: 400,
       MIN_WORDS: 10,
@@ -35,18 +35,22 @@ describe('SpeedReaderManager', () => {
   });
 
   test('handleMouseMove updates lastMousePosition', () => {
-    const mockEvent = new MouseEvent('mousemove', {
+    const mockTarget = document.createElement('div');
+    const mockEvent = {
+      type: 'mousemove',
       clientX: 100,
       clientY: 200,
-    });
+      target: mockTarget
+    } as unknown as MouseEvent;
+
     manager.handleMouseMove(mockEvent);
     expect(manager['lastMousePosition']).toEqual({ x: 100, y: 200 });
   });
 
   test('updateSettings updates settings correctly', () => {
     const changes = {
-      WORDS_PER_MINUTE: { newValue: 500 },
-      MIN_WORDS: { newValue: 15 },
+      WORDS_PER_MINUTE: 500,
+      MIN_WORDS:  15,
     };
     manager.updateSettings(changes);
     expect(manager['settings'].WORDS_PER_MINUTE).toBe(500);
