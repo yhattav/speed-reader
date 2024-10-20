@@ -1,8 +1,12 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
-    "types": ["svelte", "chrome"]
+    "types": ["svelte", "chrome", "jest", "node"],
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "target": "es2020",
+    "module": "es2020",
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "**/*.test.ts", "jest.config.js"],
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
 }

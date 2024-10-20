@@ -38,10 +38,10 @@ export class SpeedReaderManager {
         }
     }
 
-    public updateSettings(changes: any): void {
-        for (let [key, { newValue }] of Object.entries(changes)) {
+    public updateSettings(changes: Record<string, any>): void {
+        for (const [key, value] of Object.entries(changes)) {
             if (key in this.settings) {
-                this.settings[key] = newValue;
+                this.settings[key] = value;
             }
         }
         if (this.speedReader) {
