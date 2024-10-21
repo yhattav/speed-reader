@@ -24,14 +24,12 @@
   export let textSize = 24;
   export let onPopupIn: () => void;
   export let onPopupOut: () => void;
-  $: console.log('textSize text', textSize);
 
 
   let currentWord = { before: '', center: '', after: '' };
   let progress = 0;
   let isReading = false;
   let wordIndex = 0;
-
   let interval;
 
   let showContent = false;
@@ -115,7 +113,9 @@
       {isReading}
       {textSize}
     />
-    <ProgressBar {progress} />
+    <div class="progress-bar-container">
+      <ProgressBar {progress} />
+    </div>
   {/if}
 </Popup>
 </div>
@@ -141,5 +141,13 @@
   :global(.paragraph-highlight.expanded) {
     box-shadow: 0 0 0 3px rgba(var(--offsetColor), 0.2);
     border-radius: 2px;
+  }
+
+  .progress-bar-container {
+    width: 95%;
+    bottom: 0;
+    left: 2.5%;
+    position: absolute;
+    height: 2px;
   }
 </style>
