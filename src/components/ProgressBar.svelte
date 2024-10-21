@@ -14,9 +14,10 @@
   See the License for the specific language governing permissions and
   limitations under the License. */
     export let progress = 0;
+    let cappedProgress = Math.min(Math.max(progress, 0), 100);
   </script>
   
-  <div class="speed-reader-progress" style="width: {progress}%"></div>
+  <div class="speed-reader-progress" style="width: {cappedProgress}%"></div>
   
   <style>
     .speed-reader-progress {
