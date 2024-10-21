@@ -16,7 +16,7 @@
     export let center = '';
   </script>
   
-  <span class="speed-reader-center">{center}</span>
+  <span data-testid="speed-reader-center" class="speed-reader-center">{center}</span>
   
   <style>
     .speed-reader-center {

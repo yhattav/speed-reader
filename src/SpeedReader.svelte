@@ -51,7 +51,7 @@
     }
   }
 
-  function splitWord(word) {
+  export function splitWord(word) {
     const length = word.length;
     const centerIndex = Math.floor((length - 1) / 2);
     return {
@@ -61,7 +61,7 @@
     };
   }
 
-  function startReading() {
+  export function startReading() {
     console.log('startReading called');
     isReading = true;
     wordIndex = 0;
@@ -77,13 +77,13 @@
     }, 60000 / wordsPerMinute);
   }
 
-  function stopReading() {
+  export function stopReading() {
     console.log('stopReading called');
     isReading = false;
     clearInterval(interval);
   }
 
-  function handleClick() {
+  export function handleClick() {
     console.log('handleClick called');
     if (isExpanded) {
       if (isReading) {
@@ -99,7 +99,7 @@
     console.log('SpeedReader component destroyed');
   });
 </script>
-
+<div data-testid="speed-reader">
 <Popup 
   {isExpanded} 
   {offsetColor} 
@@ -118,6 +118,7 @@
     <ProgressBar {progress} />
   {/if}
 </Popup>
+</div>
 
 <style>
   .content-wrapper {
