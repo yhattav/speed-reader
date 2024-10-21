@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render } from '@testing-library/svelte';
-import BeforeText from './BeforeText.svelte';
+import BeforeText from '../../src/components/BeforeText.svelte';
 
 describe('BeforeText', () => {
   it('renders the correct text', () => {

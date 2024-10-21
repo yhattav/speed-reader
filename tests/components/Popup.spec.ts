@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { render, fireEvent } from '@testing-library/svelte';
 import { tick } from 'svelte';
-import Popup from './Popup.svelte';
+import Popup from '../../src/components/Popup.svelte';
 import {jest} from '@jest/globals'
 
 // Helper component to test slots

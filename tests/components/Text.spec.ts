@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom';
 import { render } from '@testing-library/svelte';
-import BeforeText from './BeforeText.svelte';
-import CenterText from './CenterText.svelte';
-import AfterText from './AfterText.svelte';
+import BeforeText from '../../src/components/BeforeText.svelte';
+import CenterText from '../../src/components/CenterText.svelte';
+import AfterText from '../../src/components/AfterText.svelte';
 
 describe('Text Components', () => {
   describe('BeforeText', () => {

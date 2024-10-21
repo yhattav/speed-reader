@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render } from '@testing-library/svelte';
-import AfterText from './AfterText.svelte';
+import AfterText from '../../src/components/AfterText.svelte';
 
 describe('AfterText', () => {
   it('renders the correct text', () => {

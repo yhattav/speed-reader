@@ -1,5 +1,5 @@
-import { SpeedReaderManager } from './SpeedReaderManager';
-import { speedReaderState } from './SpeedReaderManager';
+import { SpeedReaderManager } from '../src/SpeedReaderManager';
+import { speedReaderState } from '../src/SpeedReaderManager';
 import { jest } from '@jest/globals';
 
 // Mock the chrome API

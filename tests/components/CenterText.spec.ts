@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render } from '@testing-library/svelte';
-import CenterText from './CenterText.svelte';
+import CenterText from '../../src/components/CenterText.svelte';
 
 describe('CenterText', () => {
   it('renders the correct text', () => {
