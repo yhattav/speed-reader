@@ -18,10 +18,12 @@ export class SpeedReaderManager {
     private lastMousePosition = { x: 0, y: 0 };
     private removalTimeout: number | null = null;
     private settings: typeof DEFAULT_SETTINGS;
+    private debouncedHandleParagraphLeave: () => void;
 
     constructor() {
         this.settings = { ...DEFAULT_SETTINGS };
         this.loadSettings();
+        this.debouncedHandleParagraphLeave = debounce(this.handleParagraphLeave.bind(this), 100);
     }
 
     public handleMouseMove(e: MouseEvent): void {
@@ -94,7 +96,7 @@ export class SpeedReaderManager {
 
         this.positionSpeedReader();
 
-        target.addEventListener('mouseleave', () => this.handleParagraphLeave());
+        target.addEventListener('mouseleave', () => this.debouncedHandleParagraphLeave());
     }
 
     private hidePopup(): void {
@@ -162,7 +164,7 @@ export class SpeedReaderManager {
     }
 
     private handleParagraphLeave(): void {
-        console.log('Paragraph left');
+        console.log('Paragraph left (debounced)');
         if (!this.isOverSpeedReaderOrParagraph()) {
             this.initiatePopupRemoval();
         }
