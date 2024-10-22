@@ -1,0 +1,1 @@
+Add an option to blur the page behind the reader when its active.
