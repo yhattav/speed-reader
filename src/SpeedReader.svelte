@@ -15,7 +15,6 @@
   import { onMount, onDestroy } from 'svelte';
   import Popup from './components/Popup.svelte';
   import Text from './components/Text.svelte';
-  import ProgressBar from './components/ProgressBar.svelte';
 
   export let words = [];
   export let wordsPerMinute = 400;
@@ -101,6 +100,7 @@
 <Popup 
   {isExpanded} 
   {offsetColor} 
+  {progress}
   on:click={handleClick}
   {onPopupIn}
   {onPopupOut}
@@ -113,9 +113,6 @@
       {isReading}
       {textSize}
     />
-    <div class="progress-bar-container">
-      <ProgressBar {progress} />
-    </div>
   {/if}
 </Popup>
 </div>
@@ -143,11 +140,5 @@
     border-radius: 2px;
   }
 
-  .progress-bar-container {
-    width: 95%;
-    bottom: 0;
-    left: 2.5%;
-    position: absolute;
-    height: 2px;
-  }
+
 </style>

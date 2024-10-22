@@ -14,11 +14,12 @@
   limitations under the License. */
     import { createEventDispatcher, onMount } from 'svelte';
     import BackslashLogo from './BackslashLogo.svelte';
-    
+    import ProgressBar from './ProgressBar.svelte';
     export let isExpanded = false;
     export let offsetColor = '255, 69, 0'; // Default to orange-red
     export let onPopupIn: () => void;
     export let onPopupOut: () => void;
+    export let progress = 0;
     
     const dispatch = createEventDispatcher();
 
@@ -56,16 +57,21 @@
     on:mouseleave={handleMouseLeave}
     style="--background-color: {backgroundColor};"
 >
-  <div class="logo-container left decoration-level">
+  <div class="logo-container left lower-content-level">
     <BackslashLogo {isExpanded} {offsetColor} position="left" />
   </div>
   {#if isExpanded}
     <div class="content content-level">
       <slot></slot>
     </div>
+    <div class="progress-bar-container decoration-level">
+      <ProgressBar {progress} />
+    </div>
   {/if}
-  <div class="logo-container right decoration-level">
+  <div class="logo-container right lower-content-level">
     <BackslashLogo {isExpanded} {offsetColor} position="right" />
+  </div>
+  <div class="popup-background"> 
   </div>
 </div>
 
@@ -75,23 +81,37 @@
     font-family: Arial, sans-serif;
     background: var(--background-color);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(6.9px);
-    -webkit-backdrop-filter: blur(6.9px);
-    border: 1px solid rgba(250, 250, 250, 0.5);
+    /* border: 1px solid rgba(250, 250, 250, 0.5); */
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    transform-style: preserve-3d;
+    position: relative;
+    overflow: hidden;
   }
 
+  .popup-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(6.9px);
+    -webkit-backdrop-filter: blur(6.9px);
+  }
 
 
   .decoration-level {
     z-index: 0;
   }
-  .content-level {
+
+  .lower-content-level {
     z-index: 1;
+  }
+  .content-level {
+    z-index: 2;
   }
 
   .speed-reader-popup:not(.expanded) {
@@ -141,5 +161,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .progress-bar-container {
+    width: 100%;
+    bottom: 0;
+    opacity: 0.8;
+    position: absolute;
+    height: 5px;
+    transform: translateZ(-10px);
   }
 </style>
