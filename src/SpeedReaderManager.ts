@@ -2,6 +2,7 @@ import SpeedReader from './SpeedReader.svelte';
 import { debounce, isOverElement } from './utils';
 import { writable } from 'svelte/store';
 import { APP_CONSTANTS, DEFAULT_SETTINGS } from './readerConfig';
+import './global.css';
 
 export const speedReaderState = writable({
   isExpanded: false,
@@ -69,13 +70,31 @@ export class SpeedReaderManager {
     private showPopup(target: HTMLElement, words: string[]): void {
         console.log('showPopup called');
         this.stopRemovalCountdown('because im showing popup');
+
+        // Check if we're already on the same paragraph
+        if (this.currentElement === target) {
+            console.log('Already on the same paragraph, not recreating SpeedReader');
+            return;
+        }
+
+        // If we have an existing SpeedReader, destroy it
         if (this.speedReader) {
             console.log('Destroying existing SpeedReader');
             this.speedReader.$destroy();
+            this.speedReader = null;
         }
 
-        this.speedReaderDiv = document.createElement('div');
-        document.body.appendChild(this.speedReaderDiv);
+        // Remove highlight from previous paragraph
+        if (this.currentElement && this.currentElement !== target) {
+            this.currentElement.classList.remove('paragraph-highlight', 'expanded');
+        }
+
+        this.currentElement = target;
+
+        if (!this.speedReaderDiv) {
+            this.speedReaderDiv = document.createElement('div');
+            document.body.appendChild(this.speedReaderDiv);
+        }
 
         target.classList.add('paragraph-highlight');
 
@@ -212,7 +231,6 @@ export class SpeedReaderManager {
 
     private debouncedShowPopup = debounce((target: HTMLElement, words: string[]) => {
         console.log('Debounced show popup');
-        this.currentElement = target;
         speedReaderState.update(state => ({
             ...state,
             isParagraphConsideredHovered: true,

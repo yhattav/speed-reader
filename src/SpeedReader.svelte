@@ -145,7 +145,7 @@
   }
 
   :global(.paragraph-highlight.expanded) {
-    box-shadow: 0 0 0 3px rgba(var(--offsetColor), 0.2);
+    box-shadow: 0 0 3px 3px rgba(var(--offsetColor), 0.2);
     border-radius: 2px;
   }
 
