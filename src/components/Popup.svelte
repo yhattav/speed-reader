@@ -18,7 +18,7 @@
     export let isExpanded = false;
     export let offsetColor = '255, 69, 0'; // Default to orange-red
     export let onPopupIn: () => void;
-    export let onPopupOut: () => void;
+    
     export let progress = 0;
     
     const dispatch = createEventDispatcher();
@@ -43,10 +43,6 @@
       onPopupIn();
     }
 
-    function handleMouseLeave() {
-      console.log('Popup mouse leave');
-      onPopupOut();
-    }
 </script>
 
 <div 
@@ -54,7 +50,6 @@
     class:expanded={isExpanded} 
     on:click={handleClick}
     on:mouseenter={handleMouseEnter}
-    on:mouseleave={handleMouseLeave}
     style="--background-color: {backgroundColor};"
 >
   <div class="logo-container left lower-content-level">

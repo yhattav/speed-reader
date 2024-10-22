@@ -200,9 +200,9 @@ export class SpeedReaderManager {
             const left = this.lastMousePosition.x + APP_CONSTANTS.CURSOR_OFFSET_X;
             const top = this.lastMousePosition.y + APP_CONSTANTS.CURSOR_OFFSET_Y;
 
-            this.speedReaderDiv.style.position = 'fixed';
             this.speedReaderDiv.style.left = `${Math.max(0, left)}px`;
             this.speedReaderDiv.style.top = `${Math.max(0, top)}px`;
+            this.speedReaderDiv.style.position = 'fixed';
             this.speedReaderDiv.style.overflow = 'visible';
             this.speedReaderDiv.style.transition = 'width 0.3s, height 0.3s';
         }

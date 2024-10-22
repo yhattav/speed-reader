@@ -90,20 +90,24 @@
       }
     }
   }
+  function handleMouseLeave() {
+      console.log('Popup mouse leave');
+      onPopupOut();
+    }
 
   onDestroy(() => {
     if (interval) clearInterval(interval);
     console.log('SpeedReader component destroyed');
   });
 </script>
-<div data-testid="speed-reader">
+<div class="speed-reader" data-testid="speed-reader"     on:mouseleave={handleMouseLeave}
+>
 <Popup 
   {isExpanded} 
   {offsetColor} 
   {progress}
   on:click={handleClick}
   {onPopupIn}
-  {onPopupOut}
 >
   {#if showContent}
     <Text
@@ -118,6 +122,11 @@
 </div>
 
 <style>
+
+  .speed-reader {
+    padding: 10px;
+  }
+
   .content-wrapper {
     display: flex;
     flex-direction: column;
