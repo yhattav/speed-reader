@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 import { SpeedReaderManager } from './SpeedReaderManager';
-import { throttle } from './utils';
+import { debounce } from './utils';
 
 const speedReaderManager = new SpeedReaderManager();
 
@@ -21,13 +21,13 @@ function handleMouseMove(e: MouseEvent): void {
     speedReaderManager.handleMouseMove(e);
 }
 
-const throttledHandleMouseMove = throttle(handleMouseMove, 100);
+const debouncedHandleMouseMove = debounce(handleMouseMove, 100);
 
-document.addEventListener('mousemove', throttledHandleMouseMove);
+document.addEventListener('mousemove', debouncedHandleMouseMove);
 
 // Clean up
 window.addEventListener('unload', () => {
-    document.removeEventListener('mousemove', throttledHandleMouseMove);
+    document.removeEventListener('mousemove', debouncedHandleMouseMove);
     speedReaderManager.cleanup();
 });
 
