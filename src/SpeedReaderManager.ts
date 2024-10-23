@@ -1,5 +1,6 @@
 import SpeedReader from './SpeedReader.svelte';
 import { debounce, isOverElement } from './utils';
+import { splitWords } from './utils/stringUtils';
 import { writable } from 'svelte/store';
 import { APP_CONSTANTS, DEFAULT_SETTINGS } from './readerConfig';
 import './global.css';
@@ -32,7 +33,7 @@ export class SpeedReaderManager {
         const target = e.target as HTMLElement;
         
         if (target.tagName === 'P' && target.textContent) {
-            const words = target.textContent.split(/\s+/);
+            const words = splitWords(target.textContent);
             if (words.length >= this.settings.MIN_WORDS) {
                 this.debouncedShowPopup(target, words);
             }

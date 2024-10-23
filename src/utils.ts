@@ -29,10 +29,6 @@ export function isOverElement(element: HTMLElement, event: MouseEvent): boolean 
     );
 }
 
-export function splitWords(text: string): string[] {
-    return text.split(/\s+/).filter(word => word.length > 0);
-}
-
 export function clamp(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
 }

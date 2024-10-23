@@ -15,6 +15,7 @@
   import { onMount, onDestroy } from 'svelte';
   import Popup from './components/Popup.svelte';
   import Text from './components/Text.svelte';
+  import { splitWord, splitWords } from './utils/stringUtils';
 
   export let words = [];
   export let wordsPerMinute = 400;
@@ -46,16 +47,6 @@
     } else {
       showContent = false;
     }
-  }
-
-  export function splitWord(word) {
-    const length = word.length;
-    const centerIndex = Math.floor((length - 1) / 2);
-    return {
-      before: word.slice(0, centerIndex),
-      center: word[centerIndex],
-      after: word.slice(centerIndex + 1)
-    };
   }
 
   export function startReading() {
