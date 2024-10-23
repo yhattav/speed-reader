@@ -3,7 +3,7 @@ import { debounce, isOverElement } from './utils';
 import { splitWords } from './utils/stringUtils';
 import { writable } from 'svelte/store';
 import { APP_CONSTANTS, DEFAULT_SETTINGS } from './readerConfig';
-import './global.css';
+//import './global.css';
 
 export const speedReaderState = writable({
   isExpanded: false,

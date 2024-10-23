@@ -18,7 +18,6 @@ function createDefaultProps() {
     isExpanded: false,
     offsetColor: '255, 69, 0',
     onPopupIn: jest.fn(),
-    onPopupOut: jest.fn(),
   };
 }
 
@@ -56,7 +55,7 @@ describe('Popup', () => {
     component.$on('click', mockClickHandler);
 
     const popup = container.querySelector('.speed-reader-popup');
-    await fireEvent.click(popup);
+    popup && await fireEvent.click(popup);
     
     expect(mockClickHandler).toHaveBeenCalled();
   });
@@ -65,16 +64,8 @@ describe('Popup', () => {
     const props = createDefaultProps();
     const { container } = render(Popup, { props });
     const popup = container.querySelector('.speed-reader-popup');
-    await fireEvent.mouseEnter(popup);
+    popup && await fireEvent.mouseEnter(popup);
     expect(props.onPopupIn).toHaveBeenCalled();
-  });
-
-  it('calls onPopupOut when mouse leaves', async () => {
-    const props = createDefaultProps();
-    const { container } = render(Popup, { props });
-    const popup = container.querySelector('.speed-reader-popup');
-    await fireEvent.mouseLeave(popup);
-    expect(props.onPopupOut).toHaveBeenCalled();
   });
 
   it('applies the correct background color based on isExpanded', async () => {

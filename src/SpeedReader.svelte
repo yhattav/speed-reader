@@ -140,5 +140,9 @@
     border-radius: 2px;
   }
 
+  :root {
+    --offsetColor: 255, 69, 0;
+  }
+
 
 </style>
