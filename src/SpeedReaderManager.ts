@@ -10,7 +10,6 @@ export const speedReaderState = writable({
   currentWord: '',
   progress: 0,
   isOverPopup: false,
-  isParagraphConsideredHovered: false,
 });
 
 export class SpeedReaderManager {
@@ -29,7 +28,15 @@ export class SpeedReaderManager {
     }
 
     public handleMouseMove(e: MouseEvent): void {
+        //Update the position where the mouse stopped
         this.lastMousePosition = { x: e.clientX, y: e.clientY };
+
+        //Check if the mouse is over the current paragraph
+        const isOverCurrentParagraph = this.currentElement && isOverElement(this.currentElement, e) || this.isOverPopup();
+        if (!isOverCurrentParagraph) {
+            this.initiatePopupRemoval();
+        }
+        //
         const target = e.target as HTMLElement;
         
         if (target.tagName === 'P' && target.textContent) {
@@ -37,9 +44,7 @@ export class SpeedReaderManager {
             if (words.length >= this.settings.MIN_WORDS) {
                 this.debouncedShowPopup(target, words);
             }
-        } else if (!this.isOverSpeedReaderOrParagraph()) {
-            this.initiatePopupRemoval();
-        }
+        } 
     }
 
     public updateSettings(changes: Record<string, any>): void {
@@ -57,7 +62,7 @@ export class SpeedReaderManager {
     }
 
     public cleanup(): void {
-        this.hidePopup();
+        this.hidePopup('cleanup');
     }
 
     private loadSettings(): void {
@@ -119,8 +124,8 @@ export class SpeedReaderManager {
         target.addEventListener('mouseleave', () => this.debouncedHandleParagraphLeave());
     }
 
-    private hidePopup(): void {
-        console.log('hidePopup called');
+    private hidePopup(reason: string): void {
+        console.log('hidePopup called', { reason });
         if (this.speedReader) {
             this.speedReader.$destroy();
             this.speedReader = null;
@@ -133,11 +138,6 @@ export class SpeedReaderManager {
             this.currentElement.classList.remove('paragraph-highlight', 'expanded');
             this.currentElement = null;
         }
-        speedReaderState.update(state => ({
-            ...state,
-            isParagraphConsideredHovered: false,
-            isOverPopup: false,
-        }));
         this.removalTimeout = null;
     }
 
@@ -169,7 +169,6 @@ export class SpeedReaderManager {
             ...state,
             isExpanded: true,
             isOverPopup: true,
-            isParagraphConsideredHovered: true,
         }));
         this.expandSpeedReader();
     }
@@ -185,32 +184,29 @@ export class SpeedReaderManager {
 
     private handleParagraphLeave(): void {
         console.log('Paragraph left (debounced)');
-        if (!this.isOverSpeedReaderOrParagraph()) {
+        if (!this.isOverPopup()) {
             this.initiatePopupRemoval();
         }
     }
 
-    private isOverSpeedReaderOrParagraph(): boolean {
+    private isOverPopup(): boolean {
         let isOver = false;
         speedReaderState.update(state => {
-            isOver = state.isOverPopup || state.isParagraphConsideredHovered;
+            isOver = state.isOverPopup;
             return state;
         });
+        console.log('isOverPopup:', isOver);
         return isOver;
     }
 
     private initiatePopupRemoval(): void {
         console.log('Initiating popup removal');
-        speedReaderState.update(state => ({
-            ...state,
-            isParagraphConsideredHovered: false,
-        }));
         this.stopRemovalCountdown('because im starting a new one');
-        this.removalTimeout = window.setTimeout(() => this.hidePopup(), APP_CONSTANTS.HIDE_DELAY);
+        this.removalTimeout = window.setTimeout(() => this.hidePopup('timeout'), APP_CONSTANTS.HIDE_DELAY);
     }
 
     private stopRemovalCountdown(reason: string): void {
-        console.log('Stopping removal countdown:', reason);
+        console.log('Stopping removal countdown:', { reason });
         if (this.removalTimeout !== null) {
             clearTimeout(this.removalTimeout);
             this.removalTimeout = null;
@@ -234,7 +230,6 @@ export class SpeedReaderManager {
         console.log('Debounced show popup');
         speedReaderState.update(state => ({
             ...state,
-            isParagraphConsideredHovered: true,
         }));
         this.showPopup(target, words);
     }, APP_CONSTANTS.SHOW_DELAY);
