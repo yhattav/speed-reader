@@ -2,7 +2,7 @@ import SpeedReader from './SpeedReader.svelte';
 import { debounce, isOverElement } from './utils';
 import { splitWords } from './utils/stringUtils';
 import { writable } from 'svelte/store';
-import { APP_CONSTANTS, DEFAULT_SETTINGS } from './readerConfig';
+import { APP_CONSTANTS, DEFAULT_SETTINGS, ANIMATION_DURATIONS } from './readerConfig';
 //import './global.css';
 
 export const speedReaderState = writable({
@@ -227,12 +227,12 @@ export class SpeedReaderManager {
 
             this.speedReaderDiv.style.left = `${Math.max(0, left)}px`;
             this.speedReaderDiv.style.top = `${Math.max(0, top)}px`;
-            this.speedReaderDiv.style.transition = 'left 0.3s ease-in, top 0.3s ease-in';
+            this.speedReaderDiv.style.transition = `left ${ANIMATION_DURATIONS.POPUP_MOVEMENT}ms ease-in, top ${ANIMATION_DURATIONS.POPUP_MOVEMENT}ms ease-in`;
 
             // Remove 'moving' class after animation completes
             setTimeout(() => {
                 this.speedReaderDiv?.classList.remove('moving');
-            }, 300); // 300ms matches the transition duration
+            }, ANIMATION_DURATIONS.POPUP_MOVEMENT); // matches the transition duration
         }
     }
 
@@ -241,7 +241,7 @@ export class SpeedReaderManager {
             this.updateSpeedReaderPosition();
             this.speedReaderDiv.style.position = 'fixed';
             this.speedReaderDiv.style.overflow = 'visible';
-            this.speedReaderDiv.style.transition = 'width 0.3s, height 0.3s, left 0.3s ease-in, top 0.3s ease-in';
+            this.speedReaderDiv.style.transition = `width ${ANIMATION_DURATIONS.POPUP_MOVEMENT}ms, height ${ANIMATION_DURATIONS.POPUP_MOVEMENT}ms, left ${ANIMATION_DURATIONS.POPUP_MOVEMENT}ms ease-in, top ${ANIMATION_DURATIONS.POPUP_MOVEMENT}ms ease-in`;
         }
     }
 

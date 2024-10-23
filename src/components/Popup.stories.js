@@ -1,6 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import Popup from './Popup.svelte';
-
+import { ANIMATION_DURATIONS } from '../readerConfig';
 export default {
   title: 'Components/Popup',
   component: Popup,
@@ -53,6 +53,6 @@ ExpandingAndShrinking.parameters = {
 ExpandingAndShrinking.play = async ({ canvasElement }) => {
   const popup = canvasElement.querySelector('.speed-reader-popup');
   popup.click();
-  await new Promise(resolve => setTimeout(resolve, 300)); // Wait for animation
+  await new Promise(resolve => setTimeout(resolve, ANIMATION_DURATIONS.POPUP_EXPAND)); // Wait for animation
   popup.click();
 };

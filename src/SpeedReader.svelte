@@ -16,6 +16,7 @@
   import Popup from './components/Popup.svelte';
   import Text from './components/Text.svelte';
   import { splitWord, splitWords } from './utils/stringUtils';
+  import { ANIMATION_DURATIONS } from './readerConfig';
 
   export let words = [];
   export let wordsPerMinute = 400;
@@ -33,7 +34,6 @@
   let interval;
 
   let showContent = false;
-  let expandTransitionDuration = 300; // in milliseconds, adjust as needed
 
   onMount(() => {
     console.log('SpeedReader component mounted');
@@ -43,7 +43,7 @@
     if (isExpanded) {
       setTimeout(() => {
         showContent = true;
-      }, expandTransitionDuration);
+      }, ANIMATION_DURATIONS.POPUP_EXPAND);
     } else {
       showContent = false;
     }
