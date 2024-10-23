@@ -28,15 +28,18 @@ export class SpeedReaderManager {
     }
 
     public handleMouseMove(e: MouseEvent): void {
-        //Update the position where the mouse stopped
+        // Update the position where the mouse stopped
         this.lastMousePosition = { x: e.clientX, y: e.clientY };
 
-        //Check if the mouse is over the current paragraph
+        // Check if the mouse is over the current paragraph
         const isOverCurrentParagraph = this.currentElement && isOverElement(this.currentElement, e) || this.isOverPopup();
         if (!isOverCurrentParagraph) {
             this.initiatePopupRemoval();
+        } else {
+            // Update position when mouse moves inside the paragraph
+            this.updateSpeedReaderPosition();
         }
-        //
+
         const target = e.target as HTMLElement;
         
         if (target.tagName === 'P' && target.textContent) {
@@ -99,6 +102,7 @@ export class SpeedReaderManager {
 
         if (!this.speedReaderDiv) {
             this.speedReaderDiv = document.createElement('div');
+            this.speedReaderDiv.classList.add('speed-reader-div');
             document.body.appendChild(this.speedReaderDiv);
         }
 
@@ -213,24 +217,35 @@ export class SpeedReaderManager {
         }
     }
 
-    private positionSpeedReader(): void {
+    private updateSpeedReaderPosition(): void {
         if (this.speedReaderDiv) {
             const left = this.lastMousePosition.x + APP_CONSTANTS.CURSOR_OFFSET_X;
             const top = this.lastMousePosition.y + APP_CONSTANTS.CURSOR_OFFSET_Y;
 
+            // Add 'moving' class before updating position
+            this.speedReaderDiv.classList.add('moving');
+
             this.speedReaderDiv.style.left = `${Math.max(0, left)}px`;
             this.speedReaderDiv.style.top = `${Math.max(0, top)}px`;
+            this.speedReaderDiv.style.transition = 'left 0.3s ease-in, top 0.3s ease-in';
+
+            // Remove 'moving' class after animation completes
+            setTimeout(() => {
+                this.speedReaderDiv?.classList.remove('moving');
+            }, 300); // 300ms matches the transition duration
+        }
+    }
+
+    private positionSpeedReader(): void {
+        if (this.speedReaderDiv) {
+            this.updateSpeedReaderPosition();
             this.speedReaderDiv.style.position = 'fixed';
             this.speedReaderDiv.style.overflow = 'visible';
-            this.speedReaderDiv.style.transition = 'width 0.3s, height 0.3s';
+            this.speedReaderDiv.style.transition = 'width 0.3s, height 0.3s, left 0.3s ease-in, top 0.3s ease-in';
         }
     }
 
     private debouncedShowPopup = debounce((target: HTMLElement, words: string[]) => {
-        console.log('Debounced show popup');
-        speedReaderState.update(state => ({
-            ...state,
-        }));
         this.showPopup(target, words);
     }, APP_CONSTANTS.SHOW_DELAY);
 }

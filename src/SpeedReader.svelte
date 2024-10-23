@@ -144,5 +144,14 @@
     --offsetColor: 255, 69, 0;
   }
 
+  :global(.speed-reader-div.moving) {
+     
+    pointer-events: none;
+}
+
+:global(.speed-reader-div.moving *) {
+    pointer-events: none;
+}
+  
 
 </style>
