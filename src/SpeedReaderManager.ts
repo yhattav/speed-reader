@@ -262,7 +262,10 @@ export class SpeedReaderManager {
 
     private toggleBackgroundBlur(blur: boolean): void {
         if (blur) {
-            document.body.style.filter = 'blur(5px)';
+            document.body.style.filter = 'blur(3px)';
+            
+            document.body.style.transition = `filter ${ANIMATION_DURATIONS.BACKGROUND_BLUR}ms ease-in`;
+
         } else {
             document.body.style.filter = 'none';
         }
