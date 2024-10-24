@@ -35,7 +35,7 @@ export class SpeedReaderManager {
         const isOverCurrentParagraph = this.currentElement && isOverElement(this.currentElement, e) || this.isOverPopup();
         if (!isOverCurrentParagraph) {
             this.initiatePopupRemoval();
-        } else {
+        } else if (!this.isOverPopup()) {
             // Update position when mouse moves inside the paragraph
             this.updateSpeedReaderPosition();
         }
@@ -187,7 +187,7 @@ export class SpeedReaderManager {
     }
 
     private handleParagraphLeave(): void {
-        console.log('Paragraph left (debounced)');
+        console.log('Paragraph left (debounced)', ' isOverPopup:', this.isOverPopup());
         if (!this.isOverPopup()) {
             this.initiatePopupRemoval();
         }
@@ -218,6 +218,7 @@ export class SpeedReaderManager {
     }
 
     private updateSpeedReaderPosition(): void {
+        console.log('Updating speed reader position');
         if (this.speedReaderDiv) {
             const left = this.lastMousePosition.x + APP_CONSTANTS.CURSOR_OFFSET_X;
             const top = this.lastMousePosition.y + APP_CONSTANTS.CURSOR_OFFSET_Y;
