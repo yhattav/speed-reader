@@ -286,4 +286,10 @@ export class SpeedReaderManager {
             document.body.style.filter = 'none';
         }
     }
+
+    handleScroll(e: Event): void {
+        console.log('Scroll event detected');
+        this.hidePopup('scroll')
+        // Placeholder for scroll handling logic
+    }
 }

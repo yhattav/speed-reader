@@ -13,11 +13,13 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 import { SpeedReaderManager } from './SpeedReaderManager';
-import { debounce } from './utils';
+import { debounce, throttle } from './utils'; // Import throttle instead of debounce
+import { APP_CONSTANTS } from './readerConfig';
 
 const speedReaderManager = new SpeedReaderManager();
 
 function handleMouseMove(e: MouseEvent): void {
+    console.log('Mouse move event detected');
     speedReaderManager.handleMouseMove(e);
 }
 
@@ -25,9 +27,18 @@ const debouncedHandleMouseMove = debounce(handleMouseMove, 100);
 
 document.addEventListener('mousemove', debouncedHandleMouseMove);
 
+function handleScroll(e: Event): void {
+    speedReaderManager.handleScroll(e);
+}
+
+const throttledHandleScroll = throttle(handleScroll, APP_CONSTANTS.SCROLL_THROTTLE_TIME, { leading: true, trailing: false });
+
+document.addEventListener('scroll', throttledHandleScroll);
+
 // Clean up
 window.addEventListener('unload', () => {
     document.removeEventListener('mousemove', debouncedHandleMouseMove);
+    document.removeEventListener('scroll', throttledHandleScroll);
     speedReaderManager.cleanup();
 });
 

@@ -7,6 +7,7 @@ export const APP_CONSTANTS = {
     FULL_WIDTH: 300,
     FULL_HEIGHT: 100,
     MIN_DISTANCE_TO_MOVE: 300,
+    SCROLL_THROTTLE_TIME: 100,
 };
 
 export const ANIMATION_DURATIONS = {
