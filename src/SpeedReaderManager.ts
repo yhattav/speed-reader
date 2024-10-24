@@ -233,23 +233,39 @@ export class SpeedReaderManager {
             const left = this.lastMousePosition.x + APP_CONSTANTS.CURSOR_OFFSET_X;
             const top = this.lastMousePosition.y + APP_CONSTANTS.CURSOR_OFFSET_Y;
 
-            // Add 'moving' class before updating position
-            this.speedReaderDiv.classList.add('moving');
+            // Calculate the distance moved
+            const dx = left - parseFloat(this.speedReaderDiv.style.left);
+            const dy = top - parseFloat(this.speedReaderDiv.style.top);
+            const distance = Math.sqrt(dx * dx + dy * dy);
 
+            // Only update position if moved more than 5 pixels (adjust as needed)
+            if (distance > APP_CONSTANTS.MIN_DISTANCE_TO_MOVE) {
+                // Add 'moving' class before updating position
+                this.speedReaderDiv.classList.add('moving');
+
+                this.setSpeedReaderPosition(left, top);
+
+                // Remove 'moving' class after animation completes
+                setTimeout(() => {
+                    this.speedReaderDiv?.classList.remove('moving');
+                }, ANIMATION_DURATIONS.POPUP_MOVEMENT); // matches the transition duration
+            }
+        }
+    }
+
+    private setSpeedReaderPosition(left: number, top: number): void {
+        if (this.speedReaderDiv) {
             this.speedReaderDiv.style.left = `${Math.max(0, left)}px`;
             this.speedReaderDiv.style.top = `${Math.max(0, top)}px`;
             this.speedReaderDiv.style.transition = `left ${ANIMATION_DURATIONS.POPUP_MOVEMENT}ms ease-in, top ${ANIMATION_DURATIONS.POPUP_MOVEMENT}ms ease-in`;
-
-            // Remove 'moving' class after animation completes
-            setTimeout(() => {
-                this.speedReaderDiv?.classList.remove('moving');
-            }, ANIMATION_DURATIONS.POPUP_MOVEMENT); // matches the transition duration
         }
     }
 
     private positionSpeedReader(): void {
         if (this.speedReaderDiv) {
-            this.updateSpeedReaderPosition();
+            const left = this.lastMousePosition.x + APP_CONSTANTS.CURSOR_OFFSET_X;
+            const top = this.lastMousePosition.y + APP_CONSTANTS.CURSOR_OFFSET_Y;
+            this.setSpeedReaderPosition(left, top);
             this.speedReaderDiv.style.position = 'fixed';
             this.speedReaderDiv.style.overflow = 'visible';
             this.speedReaderDiv.style.transition = `width ${ANIMATION_DURATIONS.POPUP_MOVEMENT}ms, height ${ANIMATION_DURATIONS.POPUP_MOVEMENT}ms, left ${ANIMATION_DURATIONS.POPUP_MOVEMENT}ms ease-in, top ${ANIMATION_DURATIONS.POPUP_MOVEMENT}ms ease-in`;

@@ -6,6 +6,7 @@ export const APP_CONSTANTS = {
     SMALL_SIZE: 30,
     FULL_WIDTH: 300,
     FULL_HEIGHT: 100,
+    MIN_DISTANCE_TO_MOVE: 300,
 };
 
 export const ANIMATION_DURATIONS = {

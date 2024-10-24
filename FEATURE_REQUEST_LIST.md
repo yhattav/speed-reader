@@ -7,7 +7,7 @@
 
 ## User Experience (UX)
 
-- [ ] Don't update the position of the popup if the pointer didn't move a significant distance from the last popup position
+- [x] Don't update the position of the popup if the pointer didn't move a significant distance from the last popup position
 - [ ] Add keyboard shortcuts for common actions
 
 ## Performance
