@@ -20,6 +20,7 @@ export class SpeedReaderManager {
     private removalTimeout: number | null = null;
     private settings: typeof DEFAULT_SETTINGS;
     private debouncedHandleParagraphLeave: () => void;
+    private blurBackground: boolean = false;
 
     constructor() {
         this.settings = { ...DEFAULT_SETTINGS };
@@ -55,6 +56,9 @@ export class SpeedReaderManager {
             if (key in this.settings) {
                 this.settings[key] = value;
             }
+            if (key === 'blurBackground') {
+                this.blurBackground = value;
+            }
         }
         if (this.speedReader) {
             this.speedReader.$set({ 
@@ -69,10 +73,11 @@ export class SpeedReaderManager {
     }
 
     private loadSettings(): void {
-        chrome.storage.sync.get(['wordsPerMinute', 'minWords', 'textSize'], (result) => {
+        chrome.storage.sync.get(['wordsPerMinute', 'minWords', 'textSize', 'blurBackground'], (result) => {
             this.settings.WORDS_PER_MINUTE = result.wordsPerMinute || DEFAULT_SETTINGS.WORDS_PER_MINUTE;
             this.settings.MIN_WORDS = result.minWords || DEFAULT_SETTINGS.MIN_WORDS;
             this.settings.TEXT_SIZE = result.textSize || DEFAULT_SETTINGS.TEXT_SIZE;
+            this.blurBackground = result.blurBackground || false;
         });
     }
 
@@ -103,7 +108,7 @@ export class SpeedReaderManager {
         if (!this.speedReaderDiv) {
             this.speedReaderDiv = document.createElement('div');
             this.speedReaderDiv.classList.add('speed-reader-div');
-            document.body.appendChild(this.speedReaderDiv);
+            document.body.parentNode?.insertBefore(this.speedReaderDiv, document.body.nextSibling);
         }
 
         target.classList.add('paragraph-highlight');
@@ -152,6 +157,10 @@ export class SpeedReaderManager {
             if (this.currentElement) {
                 this.currentElement.classList.add('expanded');
             }
+            console.log('blurBackground:', this.blurBackground);
+            if (this.blurBackground) {
+                this.toggleBackgroundBlur(true);
+            }
         }
     }
 
@@ -164,6 +173,7 @@ export class SpeedReaderManager {
             if (this.currentElement) {
                 this.currentElement.classList.remove('expanded');
             }
+            this.toggleBackgroundBlur(false);
         }
     }
 
@@ -249,4 +259,12 @@ export class SpeedReaderManager {
     private debouncedShowPopup = debounce((target: HTMLElement, words: string[]) => {
         this.showPopup(target, words);
     }, APP_CONSTANTS.SHOW_DELAY);
+
+    private toggleBackgroundBlur(blur: boolean): void {
+        if (blur) {
+            document.body.style.filter = 'blur(5px)';
+        } else {
+            document.body.style.filter = 'none';
+        }
+    }
 }

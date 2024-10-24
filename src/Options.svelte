@@ -1,4 +1,3 @@
-
 <script lang="ts">
     /* Copyright 2024 Yonatan Hattav
     
@@ -21,6 +20,7 @@
     let minWords = 10;
     let textSize = 24; // Default text size
     let chromeApiAvailable = false;
+    let blurBackground = false; // New setting for blur background
 
     onMount(() => {
         console.log('Options component mounted');
@@ -31,11 +31,12 @@
 
         if (chromeApiAvailable) {
             // Load saved settings from storage
-            chrome.storage.sync.get(['wordsPerMinute', 'minWords', 'textSize'], (result) => {
+            chrome.storage.sync.get(['wordsPerMinute', 'minWords', 'textSize', 'blurBackground'], (result) => {
                 console.log('Chrome storage get result:', result);
                 wordsPerMinute = result.wordsPerMinute || 400;
                 minWords = result.minWords || 10;
                 textSize = result.textSize || 24;
+                blurBackground = result.blurBackground || false;
             });
         } else {
             console.error('Chrome storage API not available');
@@ -43,9 +44,9 @@
     });
 
     function saveSettings() {
-        console.log('Saving settings:', { wordsPerMinute, minWords, textSize });
+        console.log('Saving settings:', { wordsPerMinute, minWords, textSize, blurBackground });
         if (chromeApiAvailable) {
-            chrome.storage.sync.set({ wordsPerMinute, minWords, textSize }, () => {
+            chrome.storage.sync.set({ wordsPerMinute, minWords, textSize, blurBackground }, () => {
                 console.log('Settings saved successfully');
             });
         } else {
@@ -65,6 +66,11 @@
 
     function handleTextSizeChange(newValue: number) {
         textSize = newValue;
+        saveSettings();
+    }
+
+    function handleBlurBackgroundChange(newValue: boolean) {
+        blurBackground = newValue;
         saveSettings();
     }
 </script>
@@ -98,6 +104,11 @@
         value={textSize}
         onChange={handleTextSizeChange}
     />
+
+    <label>
+        <input type="checkbox" bind:checked={blurBackground} on:change={() => handleBlurBackgroundChange(blurBackground)}>
+        Blur background when reading
+    </label>
 </main>
 
 <style>
