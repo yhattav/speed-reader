@@ -66,7 +66,7 @@ describe('SpeedReaderManager', () => {
   test('loadSettings calls chrome.storage.sync.get', () => {
     (manager as any).loadSettings();
     expect(chrome.storage.sync.get).toHaveBeenCalledWith(
-      ['wordsPerMinute', 'minWords', 'textSize'],
+      ['wordsPerMinute', 'minWords', 'textSize', 'blurBackground'],
       expect.any(Function)
     );
   });

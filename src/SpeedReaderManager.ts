@@ -1,9 +1,8 @@
 import SpeedReader from './SpeedReader.svelte';
 import { debounce, isOverElement } from './utils';
-import { splitWords } from './utils/stringUtils';
+import { splitParagrahIntoWords } from './utils/stringUtils';
 import { writable } from 'svelte/store';
 import { APP_CONSTANTS, DEFAULT_SETTINGS, ANIMATION_DURATIONS } from './readerConfig';
-//import './global.css';
 
 export const speedReaderState = writable({
   isExpanded: false,
@@ -21,7 +20,7 @@ export class SpeedReaderManager {
     private settings: typeof DEFAULT_SETTINGS;
     private debouncedHandleParagraphLeave: () => void;
     private blurBackground: boolean = false;
-
+    private currentParagraphWords: string[] = [];
     constructor() {
         this.settings = { ...DEFAULT_SETTINGS };
         this.loadSettings();
@@ -42,9 +41,11 @@ export class SpeedReaderManager {
         }
 
         const target = e.target as HTMLElement;
-        
-        if (target.tagName === 'P' && target.textContent) {
-            const words = splitWords(target.textContent);
+        if (this.currentElement === target) {
+            this.debouncedShowPopup(target, this.currentParagraphWords);
+        } else if (target.tagName === 'P' && target.textContent) {
+            const words = splitParagrahIntoWords(target.textContent);
+            this.currentParagraphWords = words;
             if (words.length >= this.settings.MIN_WORDS) {
                 this.debouncedShowPopup(target, words);
             }

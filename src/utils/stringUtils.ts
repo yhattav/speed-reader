@@ -1,4 +1,4 @@
-export function splitWord(word: string) {
+export function splitWordIntoParts(word: string) {
   const length = word.length;
   const centerIndex = Math.floor((length - 1) / 2);
   return {
@@ -8,7 +8,7 @@ export function splitWord(word: string) {
   };
 }
 
-export function splitWords(text: string): string[] {
+export function splitParagrahIntoWords(text: string): string[] {
   return text.split(/\s+/).filter(word => word.length > 0);
 }
 

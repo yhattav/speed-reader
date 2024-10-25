@@ -15,7 +15,7 @@
   import { onMount, onDestroy } from 'svelte';
   import Popup from './components/Popup.svelte';
   import Text from './components/Text.svelte';
-  import { splitWord, splitWords } from './utils/stringUtils';
+  import { splitWordIntoParts } from './utils/stringUtils';
   import { ANIMATION_DURATIONS } from './readerConfig';
 
   export let words = [];
@@ -55,7 +55,7 @@
     wordIndex = 0;
     interval = setInterval(() => {
       if (wordIndex < words.length) {
-        currentWord = splitWord(words[wordIndex]);
+        currentWord = splitWordIntoParts(words[wordIndex]);
         progress = ((wordIndex + 1) / words.length) * 100;
         wordIndex++;
       } else {
